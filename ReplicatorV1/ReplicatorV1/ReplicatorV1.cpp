@@ -4,17 +4,47 @@
 
 using namespace std;
 
-list<pair<int, int>> neighbour_calculator = 
+const int iterations = 25;
+
+enum RuleSet
 {
-  make_pair(-1,0),
-  make_pair(+1,0),
-  make_pair(0,-1),
-  make_pair(0,+1),
-  make_pair(-1,-1),
-  make_pair(-1,+1),
-  make_pair(+1,-1),
-  make_pair(+1,+1),
+  V1 = 0,
+  V2 = 1,
 };
+const int ruleset = V1;
+//const int ruleset = V2;
+
+enum Neighbourhood
+{
+  VONNEUMANN  = 1,
+  MOORE       = 2,
+};
+const int neighbourhood_type = MOORE;
+//const int neighbourhood_type = VONNEUMANN;
+
+const char* character_dead  = " ";
+const char* character_alive = ".";
+
+list<pair<int, int>> neighbourhood_moore = 
+{
+  make_pair(-1, +0),
+  make_pair(+1, +0),
+  make_pair(+0, -1),
+  make_pair(+0, +1),
+  make_pair(-1, -1),
+  make_pair(-1, +1),
+  make_pair(+1, -1),
+  make_pair(+1, +1),
+};
+
+list<pair<int, int>> neighbourhood_vonneumann =
+{
+  make_pair(-1, +0),
+  make_pair(+1, +0),
+  make_pair(+0, -1),
+  make_pair(+0, +1),
+};
+
 
 enum State
 {
@@ -48,7 +78,8 @@ public:
 
   int GetLivingNeighboursCount()
   {
-    int counter = 0;
+    int counter = ruleset == V1 ? V1 : V2;
+
     for (Cell* c : neighbours)
     {
       if (c->state == ALIVE)
@@ -71,7 +102,7 @@ public:
   {
     for(Cell* c : cells)
     {
-      //Cell already exists;
+      //Cell already exists.
       if (c->x == x && c->y == y)
       {
         if (creator != nullptr)
@@ -157,7 +188,7 @@ void PrintGrid(Grid* grid, const int gen = -1)
 
   if (gen >= 0)
   {
-    cout << "[" << (gen + 1) << "]" << "\r\n\r\n";
+    cout << "[" << gen << "]" << "\r\n\r\n";
   }
   
 
@@ -165,13 +196,15 @@ void PrintGrid(Grid* grid, const int gen = -1)
   {
     for (int j = 0; j < len_y; ++j)
     {
-      cout << buff[i][j];
+      const char* character = buff[i][j] == DEAD ? character_dead : character_alive;
+      cout << character;
     }
     cout << endl;
   }
 
   cout << endl;
 }
+
 
 Grid* GetNextGeneration(const Grid* grid)
 {
@@ -196,7 +229,7 @@ void SetNeighboursForAllAliveCells(Grid* grid)
   {
     if (c->state == ALIVE)
     {
-      for (auto p : neighbour_calculator)
+      for (const auto p : (neighbourhood_type == VONNEUMANN ? neighbourhood_vonneumann : neighbourhood_moore))
       {
         c->neighbours.push_back(grid->GetCell(c->x + p.first, c->y + p.second, DEAD, c));
       }
@@ -207,7 +240,8 @@ void SetNeighboursForAllAliveCells(Grid* grid)
 
 void InitialiseGrid(Grid* grid)
 {
-  //grid->GetCell(0, 0, ALIVE);
+  grid->GetCell(0, 0, ALIVE);
+  /*
   grid->GetCell(0, 0, ALIVE);
   grid->GetCell(1, 0, ALIVE);
   grid->GetCell(2, 0, ALIVE);
@@ -244,6 +278,15 @@ void InitialiseGrid(Grid* grid)
   grid->GetCell(0 + 4, 2, ALIVE);
   grid->GetCell(0 + 4, 1, ALIVE);
 
+  grid->GetCell(0 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(1 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4, 1 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(1 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(0 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(0 + 4, 1 + 4 + 4, ALIVE);
+
   grid->GetCell(0 + 4 + 4, 0, ALIVE);
   grid->GetCell(1 + 4 + 4, 0, ALIVE);
   grid->GetCell(2 + 4 + 4, 0, ALIVE);
@@ -252,9 +295,25 @@ void InitialiseGrid(Grid* grid)
   grid->GetCell(1 + 4 + 4, 2, ALIVE);
   grid->GetCell(0 + 4 + 4, 2, ALIVE);
   grid->GetCell(0 + 4 + 4, 1, ALIVE);
+ 
+  grid->GetCell(0 + 4 + 4, 0 + 4, ALIVE);
+  grid->GetCell(1 + 4 + 4, 0 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 0 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 1 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 2 + 4, ALIVE);
+  grid->GetCell(1 + 4 + 4, 2 + 4, ALIVE);
+  grid->GetCell(0 + 4 + 4, 2 + 4, ALIVE);
+  grid->GetCell(0 + 4 + 4, 1 + 4, ALIVE);
   
-
-
+  grid->GetCell(0 + 4 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(1 + 4 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 0 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 1 + 4 + 4, ALIVE);
+  grid->GetCell(2 + 4 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(1 + 4 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(0 + 4 + 4, 2 + 4 + 4, ALIVE);
+  grid->GetCell(0 + 4 + 4, 1 + 4 + 4, ALIVE);
+  */
 }
 
 
@@ -263,8 +322,6 @@ void main()
   Grid* grid = new Grid();
 
   InitialiseGrid(grid);
-
-  const int iterations = 10;
 
   for (int i = 0; i < iterations; ++i)
   {
