@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int iterations = 25;
+const int iterations = 32;
 
 enum RuleSet
 {
@@ -24,6 +24,8 @@ const int neighbourhood_type = MOORE;
 
 const char* character_dead  = " ";
 const char* character_alive = ".";
+
+const char* NL = "\r\n";
 
 list<pair<int, int>> neighbourhood_moore = 
 {
@@ -188,7 +190,7 @@ void PrintGrid(Grid* grid, const int gen = -1)
 
   if (gen >= 0)
   {
-    cout << "[" << gen << "]" << "\r\n\r\n";
+    cout << "[" << gen << "]" << NL << NL;
   }
   
 
@@ -199,10 +201,10 @@ void PrintGrid(Grid* grid, const int gen = -1)
       const char* character = buff[i][j] == DEAD ? character_dead : character_alive;
       cout << character;
     }
-    cout << endl;
+    cout << NL;
   }
 
-  cout << endl;
+  cout << NL << NL << NL ;
 }
 
 
@@ -213,8 +215,12 @@ Grid* GetNextGeneration(const Grid* grid)
   {
     if (c->GetLivingNeighboursCount() % 2 == 1)
     {
+      /*
+      //Whacky stuff ensues if you do this instead of using the GetCell mechanism! (^^,)
       Cell* cell_temp = grid_temp->GetCell(c->x, c->y, ALIVE);
       grid_temp->cells.push_back(cell_temp);
+      */
+      grid_temp->GetCell(c->x, c->y, ALIVE);
     }
   }
 
@@ -241,7 +247,10 @@ void SetNeighboursForAllAliveCells(Grid* grid)
 void InitialiseGrid(Grid* grid)
 {
   grid->GetCell(0, 0, ALIVE);
+
   /*
+  //Use this setup with the bugged code in GetNextGeneration, 
+  //as well as alternative rulesets and neighbourhoods for some trippy results. (^^,)
   grid->GetCell(0, 0, ALIVE);
   grid->GetCell(1, 0, ALIVE);
   grid->GetCell(2, 0, ALIVE);
