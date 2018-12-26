@@ -18,6 +18,7 @@ enum Neighbourhood
 {
   VONNEUMANN  = 1,
   MOORE       = 2,
+  ALTAMISH    = 3,
 };
 const int neighbourhood_type = MOORE;
 //const int neighbourhood_type = VONNEUMANN;
@@ -47,7 +48,6 @@ list<pair<int, int>> neighbourhood_vonneumann =
   make_pair(+0, +1),
 };
 
-
 enum State
 {
   DEAD = 0,
@@ -66,12 +66,12 @@ public:
 
   State state;
 
-  Cell(const int x, const int y, const State state = DEAD, Cell* creator = nullptr)
+  Cell(const int x_in, const int y_in, const State state_in = DEAD, Cell* creator = nullptr) 
+  : 
+  x(x_in),
+  y(y_in),
+  state(state_in)
   {
-    this->y = y;
-    this->x = x;
-    this->state = state;
-
     if (creator != nullptr)
     {
       neighbours.push_back(creator);
@@ -215,11 +215,6 @@ Grid* GetNextGeneration(const Grid* grid)
   {
     if (c->GetLivingNeighboursCount() % 2 == 1)
     {
-      /*
-      //Whacky stuff ensues if you do this instead of using the GetCell mechanism! (^^,)
-      Cell* cell_temp = grid_temp->GetCell(c->x, c->y, ALIVE);
-      grid_temp->cells.push_back(cell_temp);
-      */
       grid_temp->GetCell(c->x, c->y, ALIVE);
     }
   }
@@ -247,82 +242,6 @@ void SetNeighboursForAllAliveCells(Grid* grid)
 void InitialiseGrid(Grid* grid)
 {
   grid->GetCell(0, 0, ALIVE);
-
-  /*
-  //Use this setup with the bugged code in GetNextGeneration, 
-  //as well as alternative rulesets and neighbourhoods for some trippy results. (^^,)
-  grid->GetCell(0, 0, ALIVE);
-  grid->GetCell(1, 0, ALIVE);
-  grid->GetCell(2, 0, ALIVE);
-  grid->GetCell(2, 1, ALIVE);
-  grid->GetCell(2, 2, ALIVE);
-  grid->GetCell(1, 2, ALIVE);
-  grid->GetCell(0, 2, ALIVE);
-  grid->GetCell(0, 1, ALIVE);
-  
-  grid->GetCell(0, 0 + 4, ALIVE);
-  grid->GetCell(1, 0 + 4, ALIVE);
-  grid->GetCell(2, 0 + 4, ALIVE);
-  grid->GetCell(2, 1 + 4, ALIVE);
-  grid->GetCell(2, 2 + 4, ALIVE);
-  grid->GetCell(1, 2 + 4, ALIVE);
-  grid->GetCell(0, 2 + 4, ALIVE);
-  grid->GetCell(0, 1 + 4, ALIVE);
-
-  grid->GetCell(0, 0 + 4 + 4, ALIVE);
-  grid->GetCell(1, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2, 1 + 4 + 4, ALIVE);
-  grid->GetCell(2, 2 + 4 + 4, ALIVE);
-  grid->GetCell(1, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0, 1 + 4 + 4, ALIVE);
-
-  grid->GetCell(0 + 4, 0, ALIVE);
-  grid->GetCell(1 + 4, 0, ALIVE);
-  grid->GetCell(2 + 4, 0, ALIVE);
-  grid->GetCell(2 + 4, 1, ALIVE);
-  grid->GetCell(2 + 4, 2, ALIVE);
-  grid->GetCell(1 + 4, 2, ALIVE);
-  grid->GetCell(0 + 4, 2, ALIVE);
-  grid->GetCell(0 + 4, 1, ALIVE);
-
-  grid->GetCell(0 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(1 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4, 1 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(1 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0 + 4, 1 + 4 + 4, ALIVE);
-
-  grid->GetCell(0 + 4 + 4, 0, ALIVE);
-  grid->GetCell(1 + 4 + 4, 0, ALIVE);
-  grid->GetCell(2 + 4 + 4, 0, ALIVE);
-  grid->GetCell(2 + 4 + 4, 1, ALIVE);
-  grid->GetCell(2 + 4 + 4, 2, ALIVE);
-  grid->GetCell(1 + 4 + 4, 2, ALIVE);
-  grid->GetCell(0 + 4 + 4, 2, ALIVE);
-  grid->GetCell(0 + 4 + 4, 1, ALIVE);
- 
-  grid->GetCell(0 + 4 + 4, 0 + 4, ALIVE);
-  grid->GetCell(1 + 4 + 4, 0 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 0 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 1 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 2 + 4, ALIVE);
-  grid->GetCell(1 + 4 + 4, 2 + 4, ALIVE);
-  grid->GetCell(0 + 4 + 4, 2 + 4, ALIVE);
-  grid->GetCell(0 + 4 + 4, 1 + 4, ALIVE);
-  
-  grid->GetCell(0 + 4 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(1 + 4 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 0 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 1 + 4 + 4, ALIVE);
-  grid->GetCell(2 + 4 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(1 + 4 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0 + 4 + 4, 2 + 4 + 4, ALIVE);
-  grid->GetCell(0 + 4 + 4, 1 + 4 + 4, ALIVE);
-  */
 }
 
 
