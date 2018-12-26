@@ -16,19 +16,24 @@ const int ruleset = V1;
 
 enum Neighbourhood
 {
+  MOORE       = 0,
   VONNEUMANN  = 1,
-  MOORE       = 2,
-  ALTAMISH    = 3,
+  ALTAMISH    = 2,
+
+  LAST
 };
 const int neighbourhood_type = MOORE;
 //const int neighbourhood_type = VONNEUMANN;
+//const int neighbourhood_type = ALTAMISH;
 
 const char* character_dead  = " ";
 const char* character_alive = ".";
 
 const char* NL = "\r\n";
 
-list<pair<int, int>> neighbourhood_moore = 
+typedef list<pair<int, int>> NeighbourHood;
+
+NeighbourHood neighbourhood_moore =
 {
   make_pair(-1, +0),
   make_pair(+1, +0),
@@ -40,12 +45,27 @@ list<pair<int, int>> neighbourhood_moore =
   make_pair(+1, +1),
 };
 
-list<pair<int, int>> neighbourhood_vonneumann =
+NeighbourHood neighbourhood_vonneumann =
 {
   make_pair(-1, +0),
   make_pair(+1, +0),
   make_pair(+0, -1),
   make_pair(+0, +1),
+};
+
+NeighbourHood neighbourhood_altamish =
+{
+  make_pair(-1, -1),
+  make_pair(-1, +1),
+  make_pair(+1, -1),
+  make_pair(+1, +1),
+};
+
+NeighbourHood neighbourhood_collection[LAST] = 
+{ 
+  neighbourhood_moore, 
+  neighbourhood_vonneumann, 
+  neighbourhood_altamish 
 };
 
 enum State
@@ -230,7 +250,7 @@ void SetNeighboursForAllAliveCells(Grid* grid)
   {
     if (c->state == ALIVE)
     {
-      for (const auto p : (neighbourhood_type == VONNEUMANN ? neighbourhood_vonneumann : neighbourhood_moore))
+      for (const auto p : neighbourhood_collection[neighbourhood_type])
       {
         c->neighbours.push_back(grid->GetCell(c->x + p.first, c->y + p.second, DEAD, c));
       }
