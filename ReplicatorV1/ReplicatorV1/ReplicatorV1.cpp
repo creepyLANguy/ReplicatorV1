@@ -75,14 +75,16 @@ enum State
 
 class Cell
 {
-public:
+private:
+
+  list<Cell*> neighbours;
 
   int x;
   int y;
 
-  list<Cell*> neighbours;
-
   State state;
+
+public:
 
   Cell(const int x_in, const int y_in, const State state_in = DEAD, Cell* creator = nullptr) 
   : 
@@ -94,6 +96,26 @@ public:
     {
       neighbours.push_back(creator);
     }
+  }
+
+  int GetX() const
+  {
+    return x;
+  }
+
+  int GetY() const
+  {
+    return y;
+  }
+
+  State GetState() const
+  {
+    return state;
+  };
+
+  void AddNeighbour(Cell* cell)
+  {
+    neighbours.push_back(cell);
   }
 
   int GetLivingNeighboursCount()
@@ -123,11 +145,11 @@ public:
     for(Cell* c : cells)
     {
       //Cell already exists.
-      if (c->x == x && c->y == y)
+      if (c->GetX() == x && c->GetY() == y)
       {
         if (creator != nullptr)
         {
-          c->neighbours.push_back(creator);
+          c->AddNeighbour(creator);
         }        
 
         return c;
@@ -152,32 +174,35 @@ void PrintGrid(Grid* grid, const int gen = -1)
 
   for (Cell* c : grid->cells)
   {
-    if (c->x < 0)
+    const int x = c->GetX();
+    const int y = c->GetX();
+
+    if (x < 0)
     {
-      const int abs_x = abs(c->x);
+      const int abs_x = abs(x);
       if (abs_x > shifter_x)
       {
         shifter_x = abs_x;
       }
     }
 
-    if (c->y < 0)
+    if (y < 0)
     {
-      const int abs_y = abs(c->y);
+      const int abs_y = abs(y);
       if (abs_y > shifter_y)
       {
         shifter_y = abs_y;
       }
     }
 
-    if (c->x > max_x)
+    if (x > max_x)
     {
-      max_x = c->x;
+      max_x = x;
     }
 
-    if (c->y > max_y)
+    if (y > max_y)
     {
-      max_y = c->y;
+      max_y = y;
     }
 
   }
@@ -202,7 +227,7 @@ void PrintGrid(Grid* grid, const int gen = -1)
   
   for (Cell* c : grid->cells)
   {
-    buff[c->x + shifter_x][c->y + shifter_y] = 1;
+    buff[c->GetX() + shifter_x][c->GetY() + shifter_y] = 1;
   }
 
 
@@ -233,7 +258,7 @@ Grid* GetNextGeneration(const Grid* grid)
   {
     if (c->GetLivingNeighboursCount() % 2 == 1)
     {
-      grid_temp->GetCell(c->x, c->y, ALIVE);
+      grid_temp->GetCell(c->GetX(), c->GetY(), ALIVE);
     }
   }
 
@@ -246,11 +271,12 @@ void SetNeighboursForAllAliveCells(Grid* grid)
 {
   for(Cell* c : grid->cells)
   {
-    if (c->state == ALIVE)
+    if (c->GetState() == ALIVE)
     {
       for (const auto p : neighbourhood_collection[neighbourhood_type])
       {
-        c->neighbours.push_back(grid->GetCell(c->x + p.first, c->y + p.second, DEAD, c));
+        Cell* cell = grid->GetCell(c->GetX() + p.first, c->GetY() + p.second, DEAD, c);
+        c->AddNeighbour(cell);
       }
     }
   }
