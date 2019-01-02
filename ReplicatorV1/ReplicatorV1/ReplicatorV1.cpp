@@ -6,11 +6,11 @@ const int iterations = 32;
 
 enum RuleSet
 {
-  V1 = 0,
-  V2 = 1,
+  SELF_EXCLUDE = 0,
+  SELF_INCLUDE = 1,
 };
-const int ruleset = V1;
-//const int ruleset = V2;
+const int ruleset = SELF_EXCLUDE;
+//const int ruleset = SELF_INCLUDE;
 
 enum Neighbourhood
 {
@@ -98,7 +98,7 @@ public:
 
   int GetLivingNeighboursCount()
   {
-    int counter = ruleset == V1 ? V1 : V2;
+    int counter = ruleset; 
 
     for (Cell* c : neighbours)
     {
