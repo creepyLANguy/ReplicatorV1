@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include <list>
-#include <iostream>
 
 using namespace std;
 
