@@ -27,7 +27,6 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="Neighbourhoods.h" />
-    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
