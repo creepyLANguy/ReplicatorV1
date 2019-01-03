@@ -16,8 +16,11 @@ const char* NL = "\r\n";
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void PrintGrid(Grid* grid, const int gen = -1)
+void PrintGrid(Grid* grid, const int gen = -1, const char* character_alive_in = character_alive, const char* character_dead_in = character_dead)
 {
+  const char* character_alive_final = character_alive_in;
+  const char* character_dead_final = character_dead_in;
+
   int shifter_x = 0;
   int shifter_y = 0;
 
@@ -93,7 +96,7 @@ void PrintGrid(Grid* grid, const int gen = -1)
   {
     for (int j = 0; j < len_y; ++j)
     {
-      const char* character = buff[i][j] == DEAD ? character_dead : character_alive;
+      const char* character = buff[i][j] == DEAD ? character_dead_final : character_alive_final;
       cout << character;
     }
     cout << NL;
