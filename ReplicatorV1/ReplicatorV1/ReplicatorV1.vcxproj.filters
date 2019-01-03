@@ -18,15 +18,24 @@
     <ClCompile Include="ReplicatorV1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Utilities.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Cell.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Neighbourhoods.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
