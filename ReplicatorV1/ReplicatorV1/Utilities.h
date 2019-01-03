@@ -16,7 +16,13 @@ const char* NL = "\r\n";
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void PrintGrid(Grid* grid, const int gen = -1, const char* character_alive_in = character_alive, const char* character_dead_in = character_dead)
+void PrintGrid
+  (
+    Grid* grid, 
+    const int gen = -1, 
+    const char* character_alive_in = character_alive, 
+    const char* character_dead_in = character_dead
+  )
 {
   const char* character_alive_final = character_alive_in;
   const char* character_dead_final = character_dead_in;

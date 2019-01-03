@@ -37,7 +37,15 @@ void SetNeighboursForAllAliveCells()
     {
       for (const auto p : neighbourhood_collection[neighbourhood_type])
       {
-        Cell* cell = grid->GetCell(c->GetX() + p.first, c->GetY() + p.second, DEAD, selfCountRule, c);
+        Cell* cell = grid->GetCell
+        (
+          c->GetX() + p.first, 
+          c->GetY() + p.second, 
+          DEAD, 
+          selfCountRule, 
+          c
+        );
+
         c->AddNeighbour(cell);
       }
     }
