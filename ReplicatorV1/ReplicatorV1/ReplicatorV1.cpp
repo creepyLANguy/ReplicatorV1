@@ -68,7 +68,7 @@ bool ShouldTerminateExecution()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int main()
+void main()
 {
   grid = new Grid();
 
@@ -83,9 +83,9 @@ int main()
     
     if (ShouldTerminateExecution() == true)
     {
-      return 0;
+      break;
     }
   }
 
-  return 0;
+  delete grid;
 }
