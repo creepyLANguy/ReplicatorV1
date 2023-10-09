@@ -66,7 +66,7 @@ public:
   State GetState() const
   {
     return state;
-  };
+  }
 
   void AddNeighbour(Cell* cell)
   {

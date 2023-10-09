@@ -20,17 +20,19 @@ public:
     for (Cell* c : cells)
     {
       //Cell already exists.
-      if (c->GetX() == x && c->GetY() == y)
+      if (c->GetX() != x || c->GetY() != y)
       {
-        if (creator != nullptr)
-        {
-          //AL.
-          //Comment this out if you wanna see trippy patterns :P
-          c->AddNeighbour(creator);
-        }
-
-        return c;
+        continue;
       }
+        
+      if (creator != nullptr)
+      {
+        //AL.
+        //Comment this out if you wanna see trippy patterns :P
+        c->AddNeighbour(creator);
+      }
+
+      return c;
     }
 
     //Cell does not exist at this co-ordinate, so create and return it.

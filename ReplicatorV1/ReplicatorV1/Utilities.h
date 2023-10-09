@@ -18,7 +18,7 @@ const char* NL = "\r\n";
 
 void PrintGrid
   (
-    Grid* grid, 
+    const Grid* grid, 
     const int gen = -1, 
     const char* character_alive_in = character_alive, 
     const char* character_dead_in = character_dead
@@ -33,7 +33,7 @@ void PrintGrid
   int max_x = 0;
   int max_y = 0;
 
-  for (Cell* c : grid->cells)
+  for (const Cell* c : grid->cells)
   {
     const int x = c->GetX();
     const int y = c->GetX();

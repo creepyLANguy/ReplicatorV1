@@ -33,21 +33,23 @@ void SetNeighboursForAllAliveCells()
 {
   for(Cell* c : grid->cells)
   {
-    if (c->GetState() == ALIVE)
+    if (c->GetState() == DEAD)
     {
-      for (const auto p : neighbourhood_collection[neighbourhood_type])
-      {
-        Cell* cell = grid->GetCell
-        (
-          c->GetX() + p.first, 
-          c->GetY() + p.second, 
-          DEAD, 
-          selfCountRule, 
-          c
-        );
+      continue;
+    }
+      
+    for (const auto& p : neighbourhood_collection[neighbourhood_type])
+    {
+      Cell* cell = grid->GetCell
+      (
+        c->GetX() + p.first, 
+        c->GetY() + p.second, 
+        DEAD, 
+        selfCountRule, 
+        c
+      );
 
-        c->AddNeighbour(cell);
-      }
+      c->AddNeighbour(cell);
     }
   }
 }
@@ -65,7 +67,7 @@ bool ShouldTerminateExecution()
 {
   if (terminateExecutionOnEmptyGrid == true)
   {
-    if (grid->cells.size() == 0)
+    if (grid->cells.empty())
     {
       return true;
     }
@@ -76,7 +78,7 @@ bool ShouldTerminateExecution()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void main()
+int main()
 {
   grid = new Grid();
 
@@ -96,4 +98,6 @@ void main()
   }
 
   delete grid;
+
+  return 0;
 }
